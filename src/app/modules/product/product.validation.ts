@@ -1,0 +1,58 @@
+import { z } from "zod";
+
+const productColorSchema = z.object({
+    name: z.string().min(1, "Color name is required"),
+    hex: z.string().min(1, "Color hex is required"),
+});
+
+export const createProductZodSchema = z.object({
+    name: z.string().min(1, "Product name is required"),
+    slug: z.string().min(1, "Product slug is required"),
+    subtitle: z.string().optional(),
+    description: z.string().optional(),
+    shortDescription: z.string().optional(),
+    price: z.number().min(0, "Price must be >= 0"),
+    compareAtPrice: z.number().min(0).optional(),
+    category: z.string().optional(),
+    categorySlug: z.string().optional(),
+    images: z.array(z.string()).optional(),
+    colors: z.array(productColorSchema).optional(),
+    sizes: z.array(z.string()).optional(),
+    stock: z.number().min(0, "Stock must be >= 0").default(0),
+    rating: z.number().min(0).max(5).optional(),
+    reviewCount: z.number().min(0).optional(),
+    tags: z.array(z.string()).optional(),
+    details: z.array(z.string()).optional(),
+    fabricCare: z.array(z.string()).optional(),
+    isNew: z.boolean().optional(),
+    isTrending: z.boolean().optional(),
+    isBestSeller: z.boolean().optional(),
+    isFeatured: z.boolean().optional(),
+    deleteImages: z.array(z.string()).optional(),
+});
+
+export const updateProductZodSchema = z.object({
+    name: z.string().min(1).optional(),
+    slug: z.string().min(1).optional(),
+    subtitle: z.string().optional(),
+    description: z.string().optional(),
+    shortDescription: z.string().optional(),
+    price: z.number().min(0).optional(),
+    compareAtPrice: z.number().min(0).optional(),
+    category: z.string().optional(),
+    categorySlug: z.string().optional(),
+    images: z.array(z.string()).optional(),
+    colors: z.array(productColorSchema).optional(),
+    sizes: z.array(z.string()).optional(),
+    stock: z.number().min(0).optional(),
+    rating: z.number().min(0).max(5).optional(),
+    reviewCount: z.number().min(0).optional(),
+    tags: z.array(z.string()).optional(),
+    details: z.array(z.string()).optional(),
+    fabricCare: z.array(z.string()).optional(),
+    isNew: z.boolean().optional(),
+    isTrending: z.boolean().optional(),
+    isBestSeller: z.boolean().optional(),
+    isFeatured: z.boolean().optional(),
+    deleteImages: z.array(z.string()).optional(),
+});

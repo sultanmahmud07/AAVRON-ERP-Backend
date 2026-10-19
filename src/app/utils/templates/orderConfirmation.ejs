@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Confirmed - ARVYNO</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: #f4f4f6;
+      color: #18181b;
+      margin: 0;
+      padding: 35px 15px;
+    }
+    .wrapper {
+      max-width: 620px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border: 1px solid #e4e4e7;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+    .header {
+      background-color: #ffffff;
+      padding: 36px 24px 20px 24px;
+      text-align: center;
+      border-bottom: 1px solid #f1f1f4;
+    }
+    .logo-img {
+      max-height: 65px;
+      width: auto;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+    .brand-subtitle {
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      color: #92722a;
+      text-transform: uppercase;
+      margin: 0;
+      font-weight: 700;
+    }
+    .content {
+      padding: 32px 28px;
+    }
+    .greeting {
+      font-size: 19px;
+      font-weight: 700;
+      color: #18181b;
+      margin: 0 0 8px 0;
+    }
+    .subtext {
+      font-size: 14px;
+      color: #71717a;
+      line-height: 1.5;
+      margin: 0 0 24px 0;
+    }
+    .alert-banner {
+      background: #faf8f5;
+      border: 1px solid #e8dfd1;
+      color: #785a1a;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 24px;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+    .section-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #92722a;
+      margin: 0 0 14px 0;
+      font-weight: 700;
+    }
+    .info-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+    }
+    .info-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #f1f1f4;
+      font-size: 14px;
+    }
+    .info-label {
+      color: #71717a;
+      width: 38%;
+      font-weight: 500;
+    }
+    .info-value {
+      color: #18181b;
+      font-weight: 600;
+    }
+    .highlight-gold {
+      color: #92722a;
+    }
+    .items-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+    }
+    .items-table th {
+      background-color: #fafafa;
+      color: #92722a;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 11px 12px;
+      text-align: left;
+      border-bottom: 1px solid #e4e4e7;
+    }
+    .items-table td {
+      padding: 12px;
+      border-bottom: 1px solid #f1f1f4;
+      font-size: 13px;
+      color: #27272a;
+    }
+    .item-meta {
+      font-size: 11px;
+      color: #71717a;
+      margin-top: 4px;
+    }
+    .summary-box {
+      background-color: #fafafa;
+      border: 1px solid #e4e4e7;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      font-size: 13px;
+      color: #71717a;
+    }
+    .summary-row.total {
+      border-top: 1px solid #e4e4e7;
+      margin-top: 8px;
+      padding-top: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #92722a;
+    }
+    .footer {
+      background-color: #fafafa;
+      padding: 24px;
+      text-align: center;
+      border-top: 1px solid #f1f1f4;
+      font-size: 12px;
+      color: #71717a;
+      line-height: 1.7;
+    }
+    .footer a {
+      color: #92722a;
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <img src="https://www.arvynobd.com/images/logo/arvyno-logo.png" alt="ARVYNO" class="logo-img" />
+      <p class="brand-subtitle">Order Confirmation</p>
+    </div>
+
+    <div class="content">
+      <h2 class="greeting">Thank you for your order, <%= userName %>!</h2>
+      <p class="subtext">Your order has been received and is being prepared by our atelier team.</p>
+
+      <div class="alert-banner">
+        Order Reference: <strong><%= orderNumber %></strong><% if (transactionId && paymentMethod !== "Cash on Delivery") { %> | Transaction: <strong><%= transactionId %></strong><% } %>
+      </div>
+
+      <h3 class="section-title">Order Information</h3>
+      <table class="info-table">
+        <tr>
+          <td class="info-label">Order Number</td>
+          <td class="info-value highlight-gold"><%= orderNumber %></td>
+        </tr>
+        <tr>
+          <td class="info-label">Payment Method</td>
+          <td class="info-value"><%= paymentMethod %></td>
+        </tr>
+        <% if (transactionId && paymentMethod !== "Cash on Delivery") { %>
+        <tr>
+          <td class="info-label">Transaction ID</td>
+          <td class="info-value"><%= transactionId %></td>
+        </tr>
+        <% } %>
+        <tr>
+          <td class="info-label">Shipping Address</td>
+          <td class="info-value"><%= shippingAddress %></td>
+        </tr>
+        <tr>
+          <td class="info-label">Order Date</td>
+          <td class="info-value"><%= formattedDate %></td>
+        </tr>
+      </table>
+
+      <h3 class="section-title">Items Ordered</h3>
+      <table class="items-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th style="text-align: center;">Qty</th>
+            <th style="text-align: right;">Price</th>
+            <th style="text-align: right;">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% items.forEach(function(item) { %>
+          <tr>
+            <td>
+              <strong><%= item.name %></strong>
+              <% if (item.size || item.color) { %>
+              <div class="item-meta">
+                <% if (item.size) { %>Size: <%= item.size %> <% } %>
+                <% if (item.color) { %>| Color: <%= item.color %> <% } %>
+              </div>
+              <% } %>
+            </td>
+            <td style="text-align: center;"><%= item.quantity %></td>
+            <td style="text-align: right;">BDT <%= item.price.toLocaleString() %></td>
+            <td style="text-align: right; font-weight: 600;">BDT <%= (item.price * item.quantity).toLocaleString() %></td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+
+      <div class="summary-box">
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span>BDT <%= subtotal.toLocaleString() %></span>
+        </div>
+        <div class="summary-row">
+          <span>Delivery Fee</span>
+          <span>BDT <%= shippingCost.toLocaleString() %></span>
+        </div>
+        <% if (discount > 0) { %>
+        <div class="summary-row">
+          <span>Discount</span>
+          <span style="color: #16a34a;">- BDT <%= discount.toLocaleString() %></span>
+        </div>
+        <% } %>
+        <div class="summary-row total">
+          <span>Total Amount</span>
+          <span>BDT <%= totalAmount.toLocaleString() %></span>
+        </div>
+      </div>
+
+      <p class="subtext" style="margin-bottom: 0; font-size: 13px;">
+        An official PDF invoice is attached with this email for your records. If you have any questions, feel free to reply directly to this email or contact our support.
+      </p>
+    </div>
+
+    <div class="footer">
+      <strong>ARVYNO</strong> &bull; Luxury Apparel &amp; Sartorial Essentials<br />
+      House-50, Block-F, Road-2, Eastern Housing, Pallabi, Dhaka, Bangladesh, 1216<br />
+      Hotline: <a href="tel:+8801886957897">+880 1886-957897</a> &bull; Web: <a href="https://www.arvynobd.com" target="_blank">www.arvynobd.com</a>
+    </div>
+  </div>
+</body>
+</html>

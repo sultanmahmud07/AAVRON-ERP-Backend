@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>ARVYNO Order Invoice</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f4f4f6; color: #18181b; margin: 0; padding: 35px 15px; }
+        .container { max-width: 620px; margin: 0 auto; background: #ffffff; border: 1px solid #e4e4e7; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+        .header { background: #ffffff; padding: 36px 24px 20px 24px; text-align: center; border-bottom: 1px solid #f1f1f4; }
+        .logo-img { max-height: 65px; width: auto; display: inline-block; margin-bottom: 10px; }
+        .header p { margin: 0; font-size: 11px; color: #92722a; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 700; }
+        .content { padding: 32px 28px; }
+        .content h2 { margin-top: 0; color: #18181b; font-size: 19px; }
+        .order-info { background: #faf8f5; border: 1px solid #e8dfd1; border-radius: 8px; padding: 16px 20px; margin-bottom: 24px; }
+        .order-info p { margin: 6px 0; font-size: 13px; color: #18181b; }
+        .order-info p strong { color: #785a1a; }
+        .footer { background: #fafafa; padding: 24px; text-align: center; font-size: 12px; color: #71717a; border-top: 1px solid #f1f1f4; line-height: 1.7; }
+        .footer a { color: #92722a; text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://www.arvynobd.com/images/logo/arvyno-logo.png" alt="ARVYNO" class="logo-img" />
+            <p>Luxury Apparel &amp; Sartorial Essentials</p>
+        </div>
+        <div class="content">
+            <h2>Order Invoice &amp; Summary</h2>
+            <p>Dear <%= userName %>,</p>
+            <p>Thank you for placing your order with ARVYNO. Your order has been confirmed and is being prepared by our atelier.</p>
+            <div class="order-info">
+                <p><strong>Order Number:</strong> <%= orderNumber %></p>
+                <% if (transactionId) { %>
+                <p><strong>Transaction ID:</strong> <%= transactionId %></p>
+                <% } %>
+                <p><strong>Total Amount:</strong> BDT <%= totalAmount.toLocaleString() %></p>
+            </div>
+            <p style="font-size: 13px; color: #71717a;">A detailed official invoice has been attached to this email as a PDF document for your records.</p>
+        </div>
+        <div class="footer">
+            <strong>ARVYNO</strong> &bull; Luxury Apparel &amp; Sartorial Essentials<br />
+            House-50, Block-F, Road-2, Eastern Housing, Pallabi, Dhaka, Bangladesh, 1216<br />
+            Hotline: <a href="tel:+8801886957897">+880 1886-957897</a> &bull; Web: <a href="https://www.arvynobd.com" target="_blank">www.arvynobd.com</a>
+        </div>
+    </div>
+</body>
+</html>

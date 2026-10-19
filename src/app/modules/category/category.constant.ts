@@ -1,0 +1,1 @@
+export const categorySearchableFields = ["name", "slug", "description", "tagline", "badge"];
