@@ -12,29 +12,40 @@ import { seedSuperAdmin } from "./app/utils/seedSuperAdmin";
 let server: Server;
 
 
-const startServer = async () => {
+const startServer = async (): Promise<boolean> => {
+    // Start HTTP server so port is bound and active
+    server = app.listen(envVars.PORT, () => {
+        console.log(`🚀 Server is listening on port ${envVars.PORT}`);
+    });
+
     try {
-        await mongoose.connect(envVars.DB_URL)
-
-        console.log("Connected to DB!!");
-
+        await mongoose.connect(envVars.DB_URL);
+        console.log(" Connected to DB!!");
         await cleanLegacyIndexes();
-
-        server = app.listen(envVars.PORT, () => {
-            console.log(`Server is listening to port ${envVars.PORT}`);
-        });
+        return true;
     } catch (error) {
-        console.log(error);
+        console.error("❌ Failed to connect to MongoDB:", error);
+        console.error("💡 Hint: Your IP has changed. Please add 0.0.0.0/0 (or your current IP) to MongoDB Atlas -> Network Access.");
+        return false;
     }
 }
 
 (async () => {
-    await connectRedis()
-    await startServer()
-    await seedSuperAdmin()
-    await seedEcommerceData()
-    await ReviewService.syncAllProductRatings()
-})()
+    try {
+        await connectRedis();
+    } catch (redisErr) {
+        console.error("Redis connection warning:", redisErr);
+    }
+
+    const isConnected = await startServer();
+    if (isConnected) {
+        await seedSuperAdmin();
+        await seedEcommerceData();
+        await ReviewService.syncAllProductRatings();
+    } else {
+        console.warn("⚠️ Database not connected. Skipping seeding and background sync. Please whitelist your IP in Atlas.");
+    }
+})();
 
 process.on("SIGTERM", () => {
     console.log("SIGTERM signal recieved... Server shutting down..");
