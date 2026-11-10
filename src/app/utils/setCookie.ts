@@ -7,19 +7,32 @@ export interface AuthTokens {
 }
 
 export const setAuthCookie = (res: Response, tokenInfo: AuthTokens) => {
+    const isProd = envVars.NODE_ENV === "production";
+    const cookieOptions = {
+        httpOnly: true,
+        secure: isProd,
+        sameSite: (isProd ? "none" : "lax") as "none" | "lax",
+        path: "/",
+    };
+
     if (tokenInfo.accessToken) {
-        res.cookie("accessToken", tokenInfo.accessToken, {
-            httpOnly: true,
-            secure: envVars.NODE_ENV === "production",
-            sameSite: envVars.NODE_ENV === "production" ? "none" : "lax"
-        })
+        res.cookie("accessToken", tokenInfo.accessToken, cookieOptions);
     }
 
     if (tokenInfo.refreshToken) {
-        res.cookie("refreshToken", tokenInfo.refreshToken, {
-            httpOnly: true,
-            secure: envVars.NODE_ENV === "production",
-            sameSite: envVars.NODE_ENV === "production" ? "none" : "lax"
-        })
+        res.cookie("refreshToken", tokenInfo.refreshToken, cookieOptions);
     }
-}
+};
+
+export const clearAuthCookie = (res: Response) => {
+    const isProd = envVars.NODE_ENV === "production";
+    const cookieOptions = {
+        httpOnly: true,
+        secure: isProd,
+        sameSite: (isProd ? "none" : "lax") as "none" | "lax",
+        path: "/",
+    };
+
+    res.clearCookie("accessToken", cookieOptions);
+    res.clearCookie("refreshToken", cookieOptions);
+};

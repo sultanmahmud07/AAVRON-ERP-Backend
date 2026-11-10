@@ -54,6 +54,15 @@ export const globalErrorHandler = async (err: any, req: Request, res: Response, 
         errorSources = simplifiedError.errorSources as TErrorSources[]
         message = simplifiedError.message
     }
+    // JWT Token Errors
+    else if (err.name === "TokenExpiredError" || err.message === "jwt expired") {
+        statusCode = 401;
+        message = "jwt expired";
+    }
+    else if (err.name === "JsonWebTokenError") {
+        statusCode = 401;
+        message = "Invalid token";
+    }
     else if (err instanceof AppError) {
         statusCode = err.statusCode
         message = err.message

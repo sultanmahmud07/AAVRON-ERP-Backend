@@ -8,7 +8,7 @@ import { envVars } from "../../config/env"
 import AppError from "../../errorHelpers/AppError"
 import { catchAsync } from "../../utils/catchAsync"
 import { sendResponse } from "../../utils/sendResponse"
-import { setAuthCookie } from "../../utils/setCookie"
+import { clearAuthCookie, setAuthCookie } from "../../utils/setCookie"
 import { createUserTokens } from "../../utils/userTokens"
 import { AuthServices } from "./auth.service"
 
@@ -75,36 +75,30 @@ const credentialsLogin = catchAsync(async (req: Request, res: Response, next: Ne
 const getNewAccessToken = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) {
-        throw new AppError(httpStatus.BAD_REQUEST, "No refresh token recieved from cookies")
+        clearAuthCookie(res);
+        throw new AppError(httpStatus.UNAUTHORIZED, "No refresh token recieved from cookies")
     }
-    const tokenInfo = await AuthServices.getNewAccessToken(refreshToken as string)
 
-    // res.cookie("accessToken", tokenInfo.accessToken, {
-    //     httpOnly: true,
-    //     secure: false
-    // })
+    try {
+        const tokenInfo = await AuthServices.getNewAccessToken(refreshToken as string)
+        setAuthCookie(res, tokenInfo);
 
-    setAuthCookie(res, tokenInfo);
-
-    sendResponse(res, {
-        success: true,
-        statusCode: httpStatus.OK,
-        message: "New Access Token Retrived Successfully",
-        data: tokenInfo,
-    })
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.OK,
+            message: "New Access Token Retrived Successfully",
+            data: tokenInfo,
+        })
+    } catch (error: any) {
+        clearAuthCookie(res);
+        if (error.name === "TokenExpiredError" || error.message === "jwt expired") {
+            throw new AppError(httpStatus.UNAUTHORIZED, "Refresh token expired. Please login again.")
+        }
+        throw error;
+    }
 })
 const logout = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-
-    res.clearCookie("accessToken", {
-        httpOnly: true,
-        secure: false,
-        sameSite: "lax"
-    })
-    res.clearCookie("refreshToken", {
-        httpOnly: true,
-        secure: false,
-        sameSite: "lax"
-    })
+    clearAuthCookie(res);
 
     sendResponse(res, {
         success: true,

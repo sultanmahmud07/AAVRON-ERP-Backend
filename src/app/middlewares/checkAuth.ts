@@ -14,7 +14,7 @@ export const checkAuth = (...authRoles: string[]) => async (req: Request, res: R
         const accessToken = rawToken?.startsWith("Bearer ") ? rawToken.split(" ")[1] : rawToken;
 
         if (!accessToken) {
-            throw new AppError(403, "No Token Recieved")
+            throw new AppError(httpStatus.UNAUTHORIZED, "No Token Recieved")
         }
 
 
@@ -23,16 +23,16 @@ export const checkAuth = (...authRoles: string[]) => async (req: Request, res: R
         const isUserExist = await User.findOne({ email: verifiedToken.email })
 
         if (!isUserExist) {
-            throw new AppError(httpStatus.BAD_REQUEST, "User does not exist")
+            throw new AppError(httpStatus.UNAUTHORIZED, "User does not exist")
         }
         if (!isUserExist.isVerified) {
-            throw new AppError(httpStatus.BAD_REQUEST, "User is not verified")
+            throw new AppError(httpStatus.UNAUTHORIZED, "User is not verified")
         }
         if (isUserExist.isActive === IsActive.BLOCKED || isUserExist.isActive === IsActive.INACTIVE) {
-            throw new AppError(httpStatus.BAD_REQUEST, `User is ${isUserExist.isActive}`)
+            throw new AppError(httpStatus.UNAUTHORIZED, `User is ${isUserExist.isActive}`)
         }
         if (isUserExist.isDeleted) {
-            throw new AppError(httpStatus.BAD_REQUEST, "User is deleted")
+            throw new AppError(httpStatus.UNAUTHORIZED, "User is deleted")
         }
 
         if (!authRoles.includes(verifiedToken.role)) {
